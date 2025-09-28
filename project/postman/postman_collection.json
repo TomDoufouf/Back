@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "API Express TypeScript - Gestion Produits",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentification",
+      "item": [
+        {
+          "name": "Cr\u00e9er un compte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/auth/account",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "account"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"firstname\": \"Admin\",\n  \"email\": \"admin@admin.com\",\n  \"password\": \"admin123\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Connexion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/auth/token",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["auth", "token"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@admin.com\",\n  \"password\": \"admin123\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produits",
+      "item": [
+        {
+          "name": "Lister les produits",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/products",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Cr\u00e9er un produit",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/products",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["products"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"P001\",\n  \"name\": \"Produit Test\",\n  \"description\": \"Description du produit\",\n  \"image\": \"image.jpg\",\n  \"category\": \"Cat\\u00e9gorie\",\n  \"price\": 99.99,\n  \"quantity\": 10,\n  \"internalReference\": \"REF001\",\n  \"shellId\": 1,\n  \"inventoryStatus\": \"INSTOCK\",\n  \"rating\": 4.5,\n  \"createdAt\": 1700000000,\n  \"updatedAt\": 1700000000\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Panier",
+      "item": [
+        {
+          "name": "Ajouter au panier",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/user/cart",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["user", "cart"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Liste d'envies",
+      "item": [
+        {
+          "name": "Ajouter \u00e0 la wishlist",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:3000/user/wishlist",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["user", "wishlist"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"{{productId}}\"\n}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

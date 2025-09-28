@@ -1,0 +1,226 @@
+openapi: 3.0.0
+info:
+  title: API Gestion Produits
+  version: 1.0.0
+  description: Documentation centralisée de l'API pour les produits, utilisateurs, panier et liste d'envies
+servers:
+  - url: http://localhost:3000
+paths:
+  /auth/account:
+    post:
+      summary: Crée un compte utilisateur
+      tags: [Authentification]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAccount'
+      responses:
+        '201':
+          description: Compte créé avec succès
+        '400':
+          description: Champs requis manquants
+  /auth/token:
+    post:
+      summary: Connexion utilisateur et génération du token JWT
+      tags: [Authentification]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Connexion réussie, token JWT retourné
+        '401':
+          description: Identifiants invalides
+  /products:
+    get:
+      summary: Récupère tous les produits
+      tags: [Produits]
+      responses:
+        '200':
+          description: Liste des produits
+    post:
+      summary: Ajoute un nouveau produit (admin uniquement)
+      tags: [Produits]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Produit créé avec succès
+        '403':
+          description: Accès interdit
+  /products/{id}:
+    put:
+      summary: Met à jour un produit existant
+      tags: [Produits]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: Produit mis à jour
+    delete:
+      summary: Supprime un produit
+      tags: [Produits]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Produit supprimé
+  /cart:
+    get:
+      summary: Récupère le panier de l'utilisateur connecté
+      tags: [Panier]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Contenu du panier
+        '401':
+          description: Non authentifié
+    post:
+      summary: Ajoute un produit au panier
+      tags: [Panier]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: Produit ajouté au panier
+        '401':
+          description: Non authentifié
+  /wishlist:
+    get:
+      summary: Récupère la liste d'envies de l'utilisateur connecté
+      tags: [Liste d'envies]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Contenu de la liste d'envies
+        '401':
+          description: Non authentifié
+    post:
+      summary: Ajoute un produit à la liste d'envies
+      tags: [Liste d'envies]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: string
+      responses:
+        '200':
+          description: Produit ajouté à la liste d'envies
+        '401':
+          description: Non authentifié
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserAccount:
+      type: object
+      required:
+        - username
+        - firstname
+        - email
+        - password
+      properties:
+        username:
+          type: string
+        firstname:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Product:
+      type: object
+      required:
+        - code
+        - name
+        - category
+        - price
+        - quantity
+        - inventoryStatus
+      properties:
+        code:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        category:
+          type: string
+        price:
+          type: number
+        quantity:
+          type: number
+        internalReference:
+          type: string
+        shellId:
+          type: number
+        inventoryStatus:
+          type: string
+          enum: [INSTOCK, LOWSTOCK, OUTOFSTOCK]
+        rating:
+          type: number
+        createdAt:
+          type: number
+        updatedAt:
+          type: number
